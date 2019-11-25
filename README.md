@@ -1,6 +1,6 @@
 # Figma Video Cover
 
-Figma Plugin to get the cover of YouTube and Vimeo video urls.
+Figma Plugin to get the cover of YouTube and Vimeo videos from their urls.
 
 ## How it works?
 
