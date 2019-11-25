@@ -1,8 +1,8 @@
 {
-  "name": "figma-plugin-video-cover",
+  "private": true,
+  "name": "figma-video-cover",
   "version": "1.0.0",
-  "description": "",
-  "main": "dist/plugin.js",
+  "description": "Figma Plugin to get the cover of YouTube and Vimeo video urls",
   "scripts": {
     "dev": "webpack --watch",
     "prebuild": "npm run lint:fix && rimraf dist/*",
