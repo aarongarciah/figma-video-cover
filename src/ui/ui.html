@@ -1,0 +1,26 @@
+<form id="form" accept-charset="utf-8" novalidate>
+  <label class="visually-hidden" for="videoUrl">YouTube or Vimeo video URL</label>
+  <input
+    id="videoUrl"
+    class="input"
+    name="videoUrl"
+    type="url"
+    pattern=".*\S.*"
+    placeholder="YouTube or Vimeo video URL"
+    value=""
+    autocapitalize="off"
+    autocorrect="off"
+    spellcheck="off"
+    autofocus
+    required
+  />
+
+  <button id="btnSubmit" class="button button--primary" type="submit">Insert video cover</button>
+
+  <div id="alert" class="alert hidden">
+    <div id="alert-spinner" class="alert__spinner-container">
+      <span class="alert__spinner"></span>
+    </div>
+    <span id="alert-msg" class="alert__msg"></span>
+  </div>
+</form>

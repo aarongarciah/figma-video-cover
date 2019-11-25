@@ -1,0 +1,39 @@
+{
+  "name": "figma-plugin-video-cover",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/plugin.js",
+  "scripts": {
+    "dev": "webpack --watch",
+    "prebuild": "npm run lint:fix && rimraf dist/*",
+    "build": "webpack -p",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix . ",
+    "test": "test -f dist/ui.html && test -f dist/plugin.js && echo \"Production files built correctly in the /dist folder\" && exit 0 || echo \"Couldn't find the production files under the /dist folder\" exit 1"
+  },
+  "keywords": [
+    "figma",
+    "plugin",
+    "figma plugin",
+    "video cover",
+    "typescript"
+  ],
+  "author": "Aarón García Hervás <aarongarciahervas@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/figma": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.6.0",
+    "html-webpack-inline-source-plugin": "0.0.10",
+    "html-webpack-plugin": "^3.2.0",
+    "rimraf": "^3.0.0",
+    "style-loader": "^1.0.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
+    "url-loader": "^2.2.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  }
+}
