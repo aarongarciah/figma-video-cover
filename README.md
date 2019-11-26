@@ -1,12 +1,14 @@
 # Figma Video Cover
 
-Figma Plugin to get the cover of YouTube and Vimeo videos from their urls.
+Figma plugin to get the cover image of a YouTube or Vimeo video from its url.
 
-![Figma Video Cover Demo](.github/images/demo.gif)
+![Figma Video Cover Artwork](.github/images/cover.png)
 
 ## How it works?
 
 It opens a Figma panel and you insert the YouTube or Vimeo url. If one or more layers are selected, a fill with the video cover image will be added to all of them. If no layer is selected, a new layer will be created with the video cover fill added.
+
+![Figma Video Cover Demo](.github/images/demo.gif)
 
 ## Development
 
