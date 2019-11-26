@@ -1,4 +1,5 @@
 {
+  "id": "780947947828574828",
   "name": "Video Cover",
   "api": "1.0.0",
   "main": "dist/plugin.js",
