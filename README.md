@@ -9,11 +9,14 @@ Figma Plugin to get the cover of YouTube and Vimeo videos from their urls.
 It opens a Figma panel and you insert the YouTube or Vimeo url. If one or more layers are selected, a fill with the video cover image will be added to all of them. If no layer is selected, a new layer will be created with the video cover fill added.
 
 ## Development
+
 Available commands:
+
 - `npm run dev`: starts the watcher for changes. Modify the files under the `src` folder and the code will be compiled automatically. Learn how to develop plugins for Figma [reading the docs](https://www.figma.com/plugin-docs/setup/).
 - `npm run build`: generates the production build in the `dist` folder. Before generating the build, it checks the TypeScript code for linting errors.
 - `npm run test`: simple test that ensures that the `ui.html` and `plugin.js` files have been generated in the `dist` folder.
-- `npm run lint` and `npm run lint:fix`: lint the code and lint and apply the code respectively. `npm run lint:fix` is run before the `build` script.
+- `npm run lint`: lint TypeScript code.
+- `npm run lint:fix`: lint and apply automatic fixes to TypeScript code. This script is run before the `build`.
 
 ### Having problems?
 
