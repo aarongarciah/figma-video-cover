@@ -174,6 +174,9 @@ function setupListeners() {
   window.addEventListener('keydown', function(e: KeyboardEvent) {
     try {
       const target = e.target as Element;
+
+      // Close the plugin if pressing Esc key when
+      // the input is not focused
       if (
         e.code.toString().toLowerCase() === 'escape' &&
         target.tagName.toLowerCase() !== 'input'
