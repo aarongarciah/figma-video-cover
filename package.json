@@ -3,6 +3,17 @@
   "name": "figma-video-cover",
   "version": "1.0.0",
   "description": "Figma Plugin to get the cover of YouTube and Vimeo video urls",
+  "author": {
+    "name": "Aarón García Hervás",
+    "email": "aarongarciahervas@gmail.com",
+    "url": "https://twitter.com/aarongarciah"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aarongarciah/figma-video-cover"
+  },
+  "homepage": "https://github.com/aarongarciah/figma-video-cover#readme",
   "scripts": {
     "dev": "webpack --watch",
     "prebuild": "npm run lint:fix && rimraf dist/*",
@@ -18,8 +29,6 @@
     "video cover",
     "typescript"
   ],
-  "author": "Aarón García Hervás <aarongarciahervas@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
     "@types/figma": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^2.11.0",
