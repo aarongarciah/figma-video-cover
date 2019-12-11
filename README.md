@@ -32,12 +32,8 @@ Take a look if someone already opened [a similar issue](https://github.com/aaron
 
 See the artwork for the Figma icon and cover in the [Figma file](https://www.figma.com/file/opcLVoEFiMH6B9bvlKp9Cd/).
 
-## Future
+## Roadmap
 - [ ] Support more video platforms.
-- [ ] Lint .css files with Stylelint.
-- [ ] Add a pre-commit hook to lint and prettify the code.
-- [ ] Study ways to test the Figma view outside of Figma.
-- [ ] Create a boilerplate with the base of this plugin.
 
 ---
 
