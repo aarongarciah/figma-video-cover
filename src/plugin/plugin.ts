@@ -2,10 +2,10 @@ import { ActionTypes } from '../types';
 
 figma.showUI(__html__, { width: 350, height: 180 });
 
-function createImage({ imageBytes, videoId }: { imageBytes: Uint8Array; videoId: string }) {
+function createImage({ imageBytes, videoId }: { imageBytes: Uint8Array; videoId: string }): void {
   const image = figma.createImage(imageBytes);
   const imageHash = image.hash;
-  let fill: ImagePaint = {
+  const fill: ImagePaint = {
     type: 'IMAGE',
     imageHash: imageHash,
     scaleMode: 'FILL',
