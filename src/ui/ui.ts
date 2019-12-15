@@ -53,24 +53,52 @@ function parseURL(url: string): { type: VideoType; id: string } {
   };
 }
 
-function getYoutubeThumbnailUrl(videoId: string, quality = YouTubeQualityFileName.MAX): string {
-  return `${VideoTypeBaseUrl.YOUTUBE}${videoId}/${quality}`;
+function getYoutubeThumbnailUrls(videoId: string): string[] {
+  const baseUrl = `${VideoTypeBaseUrl.YOUTUBE}${videoId}/`;
+
+  return [
+    `${baseUrl}${YouTubeQualityFileName.MAX}`,
+    `${baseUrl}${YouTubeQualityFileName.HIGH}`,
+    `${baseUrl}${YouTubeQualityFileName.MEDIUM}`,
+    `${baseUrl}${YouTubeQualityFileName.STANDARD}`,
+    `${baseUrl}${YouTubeQualityFileName.DEFAULT}`,
+  ];
 }
 
-async function getVimeoThumbnailUrl(videoId: string): Promise<string> {
+async function getVimeoThumbnailUrls(videoId: string): Promise<string[]> {
   const url = `${VideoTypeBaseUrl.VIMEO}${videoId}.json`;
   const response = await fetch(url);
 
-  if (response.status !== 200) {
+  if (!response || response.status !== 200) {
     throw new Error("Couldn't get the video cover image. Is the video URL correct?");
   }
 
+  const urls = [];
   const json = await response.json();
-  const thumbLargeUrl = json[0].thumbnail_large;
-  // Split url of large thumbnail at 640
-  const thumbLargeUrlParts = thumbLargeUrl.split(/\d{3}(?=.jpg)/);
-  // Add 1280x720 to parts and get bigger thumbnail
-  return `${thumbLargeUrlParts[0]}1280x720${thumbLargeUrlParts[1]}`;
+
+  if (!json || !json[0]) {
+    return [];
+  }
+
+  const firstResult = json[0];
+
+  if (firstResult.thumbnail_large) {
+    // Split url of large thumbnail at width digits
+    const urlParts = firstResult.thumbnail_large.split(/\d{3}(?=.jpg)/);
+    // Get a 1280x720 (bigger) thumbnail
+    urls.push(`${urlParts[0]}1280x720${urlParts[1]}`);
+    urls.push(firstResult.thumbnail_large);
+  }
+
+  if (firstResult.thumbnail_medium) {
+    urls.push(firstResult.thumbnail_medium);
+  }
+
+  if (firstResult.thumbnail_small) {
+    urls.push(firstResult.thumbnail_small);
+  }
+
+  return urls;
 }
 
 function showAlert(msg: string, variant: AlertType = AlertType.INFO): void {
@@ -95,22 +123,31 @@ function showAlert(msg: string, variant: AlertType = AlertType.INFO): void {
   $alert.classList.remove('hidden');
 }
 
-async function getThumbnailUrl(videoType: VideoType, videoId: string): Promise<string> {
+async function getThumbnailUrls(videoType: VideoType, videoId: string): Promise<string[]> {
   switch (videoType) {
     case VideoType.YOUTUBE:
-      return getYoutubeThumbnailUrl(videoId);
+      return getYoutubeThumbnailUrls(videoId);
     case VideoType.VIMEO:
       showAlert('Loading', AlertType.INFO_LOADING);
-      return await getVimeoThumbnailUrl(videoId);
+      return await getVimeoThumbnailUrls(videoId);
     default:
-      return '';
+      return [];
   }
 }
 
-async function getImage(url: string): Promise<Uint8Array> {
-  const response = await fetch(url);
+async function getImage(urls: string[]): Promise<Uint8Array> {
+  let response: Response | null = null;
 
-  if (response.status !== 200) {
+  for (const url of urls) {
+    const urlResponse = await fetch(url);
+
+    if (urlResponse && urlResponse.status === 200) {
+      response = urlResponse;
+      break;
+    }
+  }
+
+  if (!response || response.status !== 200) {
     throw new Error("Couldn't get the video cover image. Is the video URL correct?");
   }
 
@@ -151,13 +188,13 @@ function setupListeners(): void {
         );
       }
 
-      const thumbnailUrl = await getThumbnailUrl(videoType, videoId);
+      const thumbnailUrls = await getThumbnailUrls(videoType, videoId);
 
-      if (!thumbnailUrl) {
-        throw new Error('Malformed video URL');
+      if (!thumbnailUrls || (Array.isArray(thumbnailUrls) && thumbnailUrls.length === 0)) {
+        throw new Error('Malformed video URL. Only YouTube and Vimeo urls are supported.');
       }
 
-      const imageBytes = await getImage(thumbnailUrl);
+      const imageBytes = await getImage(thumbnailUrls);
 
       if (!imageBytes) {
         throw new Error('Something went wrong getting the video cover, try again.');
