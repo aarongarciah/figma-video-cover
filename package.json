@@ -18,8 +18,8 @@
     "dev": "webpack --watch",
     "prebuild": "npm run lint:fix && rimraf dist/*",
     "build": "webpack -p",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix . ",
+    "lint": "eslint . --ext .ts,.js",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
     "test": "test -f dist/ui.html && test -f dist/plugin.js && echo \"Production files built correctly in the /dist folder\" && exit 0 || echo \"Couldn't find the production files under the /dist folder\" exit 1"
   },
   "keywords": [

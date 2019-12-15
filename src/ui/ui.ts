@@ -18,7 +18,7 @@ const $alertMsg = document.querySelector('#alert-msg');
 const alertErrorClass = 'alert--error';
 const alertLoadingClass = 'alert--loading';
 
-function postMessage(action: ActionTypes, payload?: any) {
+function postMessage(action: ActionTypes, payload?: any): void {
   parent.postMessage({ pluginMessage: { action, payload } }, '*');
 }
 
@@ -53,11 +53,11 @@ function parseURL(url: string): { type: VideoType; id: string } {
   };
 }
 
-function getYoutubeThumbnailUrl(videoId: string, quality = YouTubeQualityFileName.MAX) {
+function getYoutubeThumbnailUrl(videoId: string, quality = YouTubeQualityFileName.MAX): string {
   return `${VideoTypeBaseUrl.YOUTUBE}${videoId}/${quality}`;
 }
 
-async function getVimeoThumbnailUrl(videoId: string) {
+async function getVimeoThumbnailUrl(videoId: string): Promise<string> {
   const url = `${VideoTypeBaseUrl.VIMEO}${videoId}.json`;
   const response = await fetch(url);
 
@@ -95,7 +95,7 @@ function showAlert(msg: string, variant: AlertType = AlertType.INFO): void {
   $alert.classList.remove('hidden');
 }
 
-async function getThumbnailUrl(videoType: VideoType, videoId: string) {
+async function getThumbnailUrl(videoType: VideoType, videoId: string): Promise<string> {
   switch (videoType) {
     case VideoType.YOUTUBE:
       return getYoutubeThumbnailUrl(videoId);
@@ -107,7 +107,7 @@ async function getThumbnailUrl(videoType: VideoType, videoId: string) {
   }
 }
 
-async function getImage(url: string) {
+async function getImage(url: string): Promise<Uint8Array> {
   const response = await fetch(url);
 
   if (response.status !== 200) {
@@ -119,7 +119,7 @@ async function getImage(url: string) {
   return new Uint8Array(buffer);
 }
 
-function setupListeners() {
+function setupListeners(): void {
   if (!$form) {
     console.error('<form> element not found, closing the plugin');
     postMessage(ActionTypes.NOTIFY, { message: 'Video Cover plugin: Something went wrong' });

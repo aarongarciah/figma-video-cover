@@ -44,7 +44,7 @@ function createImage({ imageBytes, videoId }: { imageBytes: Uint8Array; videoId:
   figma.closePlugin();
 }
 
-figma.ui.onmessage = ({ action, payload }) => {
+figma.ui.onmessage = ({ action, payload }): void => {
   switch (action) {
     case ActionTypes.CREATE_IMAGE:
       createImage(payload);
