@@ -16,11 +16,11 @@ export enum VideoTypeBaseUrl {
 }
 
 export enum YouTubeQualityFileName {
-  DEFAULT = 'default.jpg',
-  STANDARD = 'sddefault.jpg',
-  MEDIUM = 'mqdefault.jpg',
-  HIGH = 'hqdefault.jpg',
   MAX = 'maxresdefault.jpg',
+  STANDARD = 'sddefault.jpg',
+  HIGH = 'hqdefault.jpg',
+  MEDIUM = 'mqdefault.jpg',
+  DEFAULT = 'default.jpg',
 }
 
 export interface FormElements extends HTMLFormControlsCollection {

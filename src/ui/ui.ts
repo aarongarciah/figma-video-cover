@@ -56,13 +56,7 @@ function parseURL(url: string): { type: VideoType; id: string } {
 function getYoutubeThumbnailUrls(videoId: string): string[] {
   const baseUrl = `${VideoTypeBaseUrl.YOUTUBE}${videoId}/`;
 
-  return [
-    `${baseUrl}${YouTubeQualityFileName.MAX}`,
-    `${baseUrl}${YouTubeQualityFileName.HIGH}`,
-    `${baseUrl}${YouTubeQualityFileName.MEDIUM}`,
-    `${baseUrl}${YouTubeQualityFileName.STANDARD}`,
-    `${baseUrl}${YouTubeQualityFileName.DEFAULT}`,
-  ];
+  return Object.values(YouTubeQualityFileName).map(value => `${baseUrl}${value}`);
 }
 
 async function getVimeoThumbnailUrls(videoId: string): Promise<string[]> {
