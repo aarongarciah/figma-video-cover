@@ -1,6 +1,7 @@
 # Figma Video Cover
 
 [![Actions Status](https://github.com/aarongarciah/figma-video-cover/workflows/CI/badge.svg)](https://github.com/aarongarciah/figma-video-cover/actions)
+[![Known Vulnerabilities](https://snyk.io/test/github/aarongarciah/figma-video-cover/badge.svg?targetFile=package.json)](https://snyk.io/test/github/aarongarciah/figma-video-cover?targetFile=package.json)
 
 Figma plugin to get the cover image of a YouTube or Vimeo video from its url.
 
