@@ -11,7 +11,7 @@ export enum VideoType {
 }
 
 export enum VideoTypeBaseUrl {
-  YOUTUBE = 'https://cors-anywhere.herokuapp.com/https://img.youtube.com/vi/',
+  YOUTUBE = 'https://img.youtube.com/vi/',
   VIMEO = 'https://vimeo.com/api/v2/video/',
 }
 
