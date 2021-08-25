@@ -1,6 +1,7 @@
 {
   "id": "780947947828574828",
   "name": "Video Cover",
+  "editorType": ["figma", "figjam"],
   "api": "1.0.0",
   "main": "dist/plugin.js",
   "ui": "dist/ui.html"
