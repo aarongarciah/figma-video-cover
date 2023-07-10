@@ -18,7 +18,7 @@ const $alertMsg = document.querySelector('#alert-msg');
 const alertErrorClass = 'alert--error';
 const alertLoadingClass = 'alert--loading';
 
-function postMessage(action: ActionTypes, payload?: any): void {
+function postMessage(action: ActionTypes, payload?: unknown): void {
   parent.postMessage({ pluginMessage: { action, payload } }, '*');
 }
 
@@ -56,7 +56,7 @@ function parseURL(url: string): { type: VideoType; id: string } {
 function getYoutubeThumbnailUrls(videoId: string): string[] {
   const baseUrl = `${VideoTypeBaseUrl.YOUTUBE}${videoId}/`;
 
-  return Object.values(YouTubeQualityFileName).map(value => `${baseUrl}${value}`);
+  return Object.values(YouTubeQualityFileName).map((value) => `${baseUrl}${value}`);
 }
 
 async function getVimeoThumbnailUrls(videoId: string): Promise<string[]> {
@@ -67,7 +67,7 @@ async function getVimeoThumbnailUrls(videoId: string): Promise<string[]> {
     throw new Error("Couldn't get the video cover image. Is the video URL correct?");
   }
 
-  const urls = [];
+  const urls: string[] = [];
   const json = await response.json();
 
   if (!json || !json[0]) {
@@ -76,21 +76,11 @@ async function getVimeoThumbnailUrls(videoId: string): Promise<string[]> {
 
   const firstResult = json[0];
 
-  if (firstResult.thumbnail_large) {
-    // Split url of large thumbnail at width digits
-    const urlParts = firstResult.thumbnail_large.split(/\d{3}(?=.jpg)/);
-    // Get a 1280x720 (bigger) thumbnail
-    urls.push(`${urlParts[0]}1280x720${urlParts[1]}`);
-    urls.push(firstResult.thumbnail_large);
-  }
-
-  if (firstResult.thumbnail_medium) {
-    urls.push(firstResult.thumbnail_medium);
-  }
-
-  if (firstResult.thumbnail_small) {
-    urls.push(firstResult.thumbnail_small);
-  }
+  ['thumbnail_large', 'thumbnail_medium', 'thumbnail_small'].forEach((key) => {
+    if (firstResult[key]) {
+      urls.push(firstResult[key]);
+    }
+  });
 
   return urls;
 }
@@ -129,27 +119,6 @@ async function getThumbnailUrls(videoType: VideoType, videoId: string): Promise<
   }
 }
 
-async function getImage(urls: string[]): Promise<Uint8Array> {
-  let response: Response | null = null;
-
-  for (const url of urls) {
-    const urlResponse = await fetch(url);
-
-    if (urlResponse && urlResponse.status === 200) {
-      response = urlResponse;
-      break;
-    }
-  }
-
-  if (!response || response.status !== 200) {
-    throw new Error("Couldn't get the video cover image. Is the video URL correct?");
-  }
-
-  const buffer = await response.arrayBuffer();
-
-  return new Uint8Array(buffer);
-}
-
 function setupListeners(): void {
   if (!$form) {
     console.error('<form> element not found, closing the plugin');
@@ -158,7 +127,7 @@ function setupListeners(): void {
     return;
   }
 
-  $form.addEventListener('submit', async function(e) {
+  $form.addEventListener('submit', async function (e) {
     try {
       e.preventDefault();
 
@@ -188,21 +157,15 @@ function setupListeners(): void {
         throw new Error('Malformed video URL. Only YouTube and Vimeo urls are supported.');
       }
 
-      const imageBytes = await getImage(thumbnailUrls);
-
-      if (!imageBytes) {
-        throw new Error('Something went wrong getting the video cover, try again.');
-      }
-
-      postMessage(ActionTypes.CREATE_IMAGE, { imageBytes, videoId });
+      postMessage(ActionTypes.CREATE_IMAGE, { urls: thumbnailUrls, videoId });
     } catch (error) {
-      showAlert(error.message, AlertType.ERROR);
+      showAlert(error instanceof Error ? error.message : 'Something went wrong', AlertType.ERROR);
     }
 
     return false;
   });
 
-  window.addEventListener('keydown', function(e: KeyboardEvent) {
+  window.addEventListener('keydown', function (e: KeyboardEvent) {
     try {
       const target = e.target as Element;
 

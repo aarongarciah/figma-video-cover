@@ -15,9 +15,9 @@
   },
   "homepage": "https://github.com/aarongarciah/figma-video-cover#readme",
   "scripts": {
-    "dev": "webpack --watch",
-    "prebuild": "npm run lint:fix && rimraf dist/*",
-    "build": "webpack -p",
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider webpack --watch",
+    "prebuild": "NODE_OPTIONS=--openssl-legacy-provider npm run lint:fix && rimraf dist/*",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack -p",
     "lint": "eslint . --ext .ts,.js",
     "lint:fix": "eslint . --ext .ts,.js --fix",
     "test": "test -f dist/ui.html && test -f dist/plugin.js && echo \"Production files built correctly in the /dist folder\" && exit 0 || echo \"Couldn't find the production files under the /dist folder\" exit 1"
@@ -30,7 +30,7 @@
     "typescript"
   ],
   "devDependencies": {
-    "@types/figma": "^1.0.3",
+    "@figma/plugin-typings": "^1.70.0",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "css-loader": "^3.4.2",

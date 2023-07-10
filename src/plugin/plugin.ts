@@ -2,52 +2,73 @@ import { ActionTypes } from '../types';
 
 figma.showUI(__html__, { width: 350, height: 180 });
 
-function createImage({ imageBytes, videoId }: { imageBytes: Uint8Array; videoId: string }): void {
-  const image = figma.createImage(imageBytes);
-  const imageHash = image.hash;
-  const fill: ImagePaint = {
-    type: 'IMAGE',
-    imageHash: imageHash,
-    scaleMode: 'FILL',
-  };
-  const nodes = figma.currentPage.selection;
+async function createImage({ urls, videoId }: { urls: string[]; videoId: string }): Promise<void> {
+  try {
+    let fillHash = null;
 
-  // Fill all selected nodes with the image
-  if (Array.isArray(nodes) && nodes.length > 0) {
-    nodes.forEach(node => {
-      if (!Array.isArray(node.fills)) {
-        return;
-      }
+    for (const url of urls) {
+      try {
+        const image = await figma.createImageAsync(url);
+        fillHash = image?.hash;
 
-      node.fills = [...node.fills, fill];
-    });
-  }
-  // Create a rectangle filled with the image
-  else {
-    const rect = figma.createRectangle();
+        if (fillHash) {
+          break;
+        }
+      } catch (error) {}
+    }
 
-    // 16:9 aspect ratio
-    const width = 480;
-    const height = 270;
+    if (!fillHash) {
+      throw new Error("Couldn't get the video cover image. Is the video URL correct?");
+    }
 
-    rect.resize(width, height);
-    rect.x = figma.viewport.center.x - Math.round(width / 2);
-    rect.y = figma.viewport.center.y - Math.round(height / 2);
-    rect.name = `Video cover ${videoId}`;
-    rect.fills = [fill];
+    const fill: ImagePaint = {
+      type: 'IMAGE',
+      imageHash: fillHash,
+      scaleMode: 'FILL',
+    };
 
-    figma.currentPage.appendChild(rect);
-    figma.currentPage.selection = [rect];
-    figma.viewport.scrollAndZoomIntoView([rect]);
+    const nodes = figma.currentPage.selection;
+
+    // Fill all selected nodes with the image
+    if (Array.isArray(nodes) && nodes.length > 0) {
+      nodes.forEach((node) => {
+        if (!Array.isArray(node.fills)) {
+          return;
+        }
+
+        node.fills = [...node.fills, fill];
+      });
+    }
+    // Create a rectangle filled with the image
+    else {
+      const rect = figma.createRectangle();
+
+      // 16:9 aspect ratio
+      const width = 480;
+      const height = 270;
+
+      rect.resize(width, height);
+      rect.x = figma.viewport.center.x - Math.round(width / 2);
+      rect.y = figma.viewport.center.y - Math.round(height / 2);
+      rect.name = `Video cover ${videoId}`;
+      rect.fills = [fill];
+
+      figma.currentPage.appendChild(rect);
+      figma.currentPage.selection = [rect];
+      figma.viewport.scrollAndZoomIntoView([rect]);
+    }
+  } catch (error) {
+    console.error(error);
+    figma.notify(error instanceof Error ? error.message : 'Something went wrong');
   }
 
   figma.closePlugin();
 }
 
-figma.ui.onmessage = ({ action, payload }): void => {
+figma.ui.onmessage = async ({ action, payload }): Promise<void> => {
   switch (action) {
     case ActionTypes.CREATE_IMAGE:
-      createImage(payload);
+      await createImage(payload);
     case ActionTypes.NOTIFY:
       figma.notify(payload.message || '');
     case ActionTypes.CLOSE:

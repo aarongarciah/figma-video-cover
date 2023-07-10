@@ -4,5 +4,14 @@
   "editorType": ["figma", "figjam"],
   "api": "1.0.0",
   "main": "dist/plugin.js",
-  "ui": "dist/ui.html"
+  "ui": "dist/ui.html",
+  "networkAccess": {
+    "allowedDomains": [
+      "https://img.youtube.com/vi/",
+      "https://vimeo.com/api/v2/video/",
+      "https://i.vimeocdn.com/video/",
+      "https://rsms.me/inter/font-files/"
+    ],
+    "reasoning": "These domains are accessed to get the video thumbnail and load the Inter font."
+  }
 }
